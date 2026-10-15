@@ -185,7 +185,7 @@
             cursor: pointer;
             font-weight: 700;
             font-size: 0.9rem;
-transition: all 0.2s;
+            transition: all 0.2s;
         }
 
         .btn-add:hover {
@@ -225,6 +225,13 @@ transition: all 0.2s;
             font-size: 0.8rem;
             font-weight: 700;
             display: none;
+        }
+
+        .static-info-text {
+            font-size: 0.95rem;
+            color: #475569;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
         }
 
         .clearfix::after {
@@ -384,7 +391,7 @@ transition: all 0.2s;
                     </div>
                 </div>
                 
-                <div class="sub-result">Månadskostnad: <span class="res-bank">289</span> kr</div>
+                <div class="sub-result">Månadskostnad: <span class="res-bank">0</span> kr</div>
             </div>
 
             <div class="category-box clearfix">
@@ -409,17 +416,14 @@ transition: all 0.2s;
 
             <div class="category-box clearfix">
                 <div class="category-title">🚨 Larm</div>
-                <div class="form-row">
-                    <div>
-                        <label>Månadskostnad (kr)</label>
-                        <input type="number" class="alarm-cost" value="399" oninput="calculate()">
-                    </div>
+                <div class="static-info-text">Fast månadskostnad för larmpaket hos oss.</div>
+                <div class="form-row" style="grid-template-columns: 1fr;">
                     <div>
                         <label>Extra rabatt på hemf. (%)</label>
                         <input type="number" class="alarm-disc" value="5" oninput="calculate()">
                     </div>
                 </div>
-                <div class="sub-result">Månadskostnad: <span class="res-alarm">0</span> kr</div>
+                <div class="sub-result">Månadskostnad: <span class="res-alarm">289</span> kr</div>
             </div>
         </div>
 
@@ -543,21 +547,20 @@ transition: all 0.2s;
         const card = document.getElementById(id);
         const isHosOss = (id === 'opt1');
         
-        let bankMonthly = 0;
         const loan = parseFloat(card.querySelector('.bank-loan').value) || 0;
         const rate = parseFloat(card.querySelector('.bank-rate').value) || 0;
+        const bankMonthly = (loan * (rate / 100)) / 12;
+        card.querySelector('.res-bank').innerText = Math.round(bankMonthly).toLocaleString('sv-SE');
 
+        let alarmMonthly = 0;
         if (isHosOss) {
-            bankMonthly = 289;
-            card.querySelector('.res-bank').innerText = "289";
+            alarmMonthly = 289;
+            card.querySelector('.res-alarm').innerText = "289";
         } else {
-            bankMonthly = (loan * (rate / 100)) / 12;
-            card.querySelector('.res-bank').innerText = Math.round(bankMonthly).toLocaleString('sv-SE');
+            alarmMonthly = parseFloat(card.querySelector('.alarm-cost').value) || 0;
+            card.querySelector('.res-alarm').innerText = Math.round(alarmMonthly).toLocaleString('sv-SE');
         }
-
-        const alarmMonthly = parseFloat(card.querySelector('.alarm-cost').value) || 0;
         const alarmDiscountPercent = parseFloat(card.querySelector('.alarm-disc').value) || 0;
-        card.querySelector('.res-alarm').innerText = Math.round(alarmMonthly).toLocaleString('sv-SE');
 
         let isGold = false;
         if (isHosOss) {
@@ -593,7 +596,7 @@ transition: all 0.2s;
 
         return {
             total: bankMonthly + alarmMonthly + totalInsuranceMonthly,
-            bankRaw: (loan * (rate / 100)) / 12,
+            bankRaw: bankMonthly,
             isGold: isGold
         };
     }
@@ -617,7 +620,7 @@ transition: all 0.2s;
         bar1.style.width = bar1Percent + "%";
         bar2.style.width = bar2Percent + "%";
 
-        const interestSaving = Math.max(0, res2.bankRaw - 289);
+        const interestSaving = Math.max(0, res2.bankRaw - res1.bankRaw);
         document.getElementById('benefit-interest-val').innerText = `${Math.round(interestSaving).toLocaleString('sv-SE')} kr/mån`;
 
         const cardRow = document.getElementById('benefit-card-row');
@@ -669,10 +672,11 @@ transition: all 0.2s;
 
     function getCardData(id) {
         const card = document.getElementById(id);
+        const isHosOss = (id === 'opt1');
         const data = {
             loan: card.querySelector('.bank-loan').value,
             rate: card.querySelector('.bank-rate').value,
-            alarmCost: card.querySelector('.alarm-cost').value,
+            alarmCost: isHosOss ? "289" : card.querySelector('.alarm-cost').value,
             alarmDisc: card.querySelector('.alarm-disc').value,
             insurances: []
         };
@@ -711,7 +715,6 @@ transition: all 0.2s;
             const opt1 = document.getElementById('opt1');
             opt1.querySelector('.bank-loan').value = state.opt1.loan;
             opt1.querySelector('.bank-rate').value = state.opt1.rate;
-            opt1.querySelector('.alarm-cost').value = state.opt1.alarmCost;
             opt1.querySelector('.alarm-disc').value = state.opt1.alarmDisc;
             
             document.getElementById('chk-account').checked = state.chkAccount;
@@ -735,7 +738,7 @@ transition: all 0.2s;
             opt2.querySelector('.bank-loan').value = state.opt2.loan;
             opt2.querySelector('.bank-rate').value = state.opt2.rate;
             opt2.querySelector('.alarm-cost').value = state.opt2.alarmCost;
-            if(opt2.querySelector('.alarm-disc')) opt2.querySelector('.alarm-disc').value = state.opt2.alarmDisc;
+            opt2.querySelector('.alarm-disc').value = state.opt2.alarmDisc;
 
             const list2 = opt2.querySelector('.insurance-list');
             list2.innerHTML = '';
