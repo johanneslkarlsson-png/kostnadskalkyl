@@ -125,7 +125,7 @@
         }
 
         .form-row.triple {
-            grid-template-columns: 2fr 1fr auto;
+            grid-template-columns: 2fr 1fr 1fr auto;
             gap: 0.5rem;
             align-items: center;
         }
@@ -138,7 +138,7 @@
             color: #475569;
         }
 
-        input[type="number"], input[type="text"] {
+        input[type="number"], input[type="text"], select {
             width: 100%;
             padding: 0.6rem;
             border: 1px solid var(--border);
@@ -148,32 +148,9 @@
             color: var(--text);
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: 2px solid var(--lf-blue);
             background-color: #fff;
-        }
-
-        .checkbox-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px dashed var(--border);
-        }
-
-        .checkbox-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .checkbox-row input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
         }
 
         .btn-add {
@@ -215,23 +192,6 @@
             border-radius: 4px;
             display: inline-block;
             float: right;
-        }
-
-        .badge-gold {
-            background-color: #fef08a;
-            color: #854d0e;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: none;
-        }
-
-        .static-info-text {
-            font-size: 0.95rem;
-            color: #475569;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
         }
 
         .clearfix::after {
@@ -299,7 +259,6 @@
             border: 1px solid #bbf7d0;
         }
 
-        /* Övriga rabatter-modul */
         .extra-benefits-box {
             background-color: var(--lf-light-blue);
             border: 1px solid var(--border);
@@ -337,13 +296,6 @@
             font-weight: 700;
             color: var(--success);
         }
-        
-        .inactive-benefit {
-            color: #94a3b8;
-        }
-        .inactive-benefit .benefit-value {
-            color: #94a3b8;
-        }
     </style>
 </head>
 <body>
@@ -365,10 +317,7 @@
             
             <!-- Bank -->
             <div class="category-box clearfix">
-                <div class="category-title">
-                    <span>🏦 Bank</span>
-                    <span id="gold-badge" class="badge-gold">👑 GULDKUND</span>
-                </div>
+                <div class="category-title">🏦 Bank</div>
                 <div class="form-row">
                     <div>
                         <label>Summa lån (kr)</label>
@@ -379,395 +328,29 @@
                         <input type="number" class="bank-rate" step="0.01" value="2.70" oninput="calculate()">
                     </div>
                 </div>
-                
-                <div class="checkbox-container">
-                    <div class="checkbox-row">
-                        <input type="checkbox" id="chk-account" onchange="calculate()">
-                        <label for="chk-account">Aktivt privatkonto hos oss (Ja)</label>
-                    </div>
-                    <div class="checkbox-row">
-                        <input type="checkbox" id="chk-savings" onchange="calculate()">
-                        <label for="chk-savings">Sparande >500 kr/mån eller kapital >200' kr (Ja)</label>
-                    </div>
-                </div>
-                
                 <div class="sub-result">Månadskostnad: <span class="res-bank">0</span> kr</div>
             </div>
 
+            <!-- Försäkring -->
             <div class="category-box clearfix">
                 <div class="category-title">
                     <span>🛡️ Försäkring</span>
                     <button class="btn-add" onclick="addInsuranceRow('opt1')">+</button>
                 </div>
                 <div class="insurance-list">
-                    <div class="form-row">
+                    <div class="form-row triple">
                         <div>
                             <label>Försäkringens namn</label>
                             <input type="text" class="ins-name" value="Hemförsäkring" readonly>
                         </div>
                         <div>
-                            <label>Kostnad (kr/år)</label>
-                            <input type="number" class="ins-cost" value="3600" oninput="calculate()">
-                        </div>
-                    </div>
-                </div>
-                <div class="sub-result">Månadskostnad: <span class="res-ins">0</span> kr</div>
-            </div>
-
-            <div class="category-box clearfix">
-                <div class="category-title">🚨 Larm</div>
-                <div class="static-info-text">Fast månadskostnad för larmpaket hos oss.</div>
-                <div class="form-row" style="grid-template-columns: 1fr;">
-                    <div>
-                        <label>Extra rabatt på hemf. (%)</label>
-                        <input type="number" class="alarm-disc" value="5" oninput="calculate()">
-                    </div>
-                </div>
-                <div class="sub-result">Månadskostnad: <span class="res-alarm">289</span> kr</div>
-            </div>
-        </div>
-
-        <div class="option-card" id="opt2">
-            <div class="option-title">Hos konkurrent</div>
-            
-            <div class="category-box clearfix">
-                <div class="category-title">🏦 Bank</div>
-                <div class="form-row">
-                    <div>
-                        <label>Summa lån (kr)</label>
-                        <input type="number" class="bank-loan" value="3000000" oninput="calculate()">
-                    </div>
-                    <div>
-                        <label>Räntesats (%)</label>
-                        <input type="number" class="bank-rate" step="0.01" value="3.90" oninput="calculate()">
-                    </div>
-                </div>
-                <div class="sub-result">Månadskostnad: <span class="res-bank">0</span> kr</div>
-            </div>
-
-            <div class="category-box clearfix">
-                <div class="category-title">
-                    <span>🛡️ Försäkring</span>
-                    <button class="btn-add" onclick="addInsuranceRow('opt2')">+</button>
-                </div>
-                <div class="insurance-list">
-                    <div class="form-row">
-                        <div>
-                            <label>Försäkringens namn</label>
-                            <input type="text" class="ins-name" value="Hemförsäkring" readonly>
-                        </div>
-                        <div>
-                            <label>Kostnad (kr/år)</label>
+                            <label>Pris (kr/år)</label>
                             <input type="number" class="ins-cost" value="4000" oninput="calculate()">
                         </div>
+                        <div>
+                            <label>Rabatt (%)</label>
+                            <input type="number" class="ins-disc" value="20" oninput="calculate()">
+                        </div>
+                        <div></div>
                     </div>
                 </div>
-                <div class="sub-result">Månadskostnad: <span class="res-ins">0</span> kr</div>
-            </div>
-
-            <div class="category-box clearfix">
-                <div class="category-title">🚨 Larm</div>
-                <div class="form-row">
-                    <div>
-                        <label>Månadskostnad (kr)</label>
-                        <input type="number" class="alarm-cost" value="450" oninput="calculate()">
-                    </div>
-                    <div>
-                        <label>Extra rabatt på hemf. (%)</label>
-                        <input type="number" class="alarm-disc" value="0" oninput="calculate()">
-                    </div>
-                </div>
-                <div class="sub-result">Månadskostnad: <span class="res-alarm">0</span> kr</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="summary-card">
-        <div class="summary-title">📊 Visuell Sammanställning</div>
-        
-        <div class="visual-bar-container">
-            <div class="bar-label">
-                <span>Hos oss</span>
-                <span id="label-tot1">0 kr/mån</span>
-            </div>
-            <div class="bar-bg">
-                <div id="bar1" class="bar-fill" style="background-color: var(--lf-blue);"></div>
-            </div>
-
-            <div class="bar-label">
-                <span>Hos konkurrent</span>
-                <span id="label-tot2">0 kr/mån</span>
-            </div>
-            <div class="bar-bg">
-                <div id="bar2" class="bar-fill" style="background-color: var(--lf-blue);"></div>
-            </div>
-        </div>
-
-        <div id="comparison-result" class="result-box winner">
-            Räknar ut skillnad...
-        </div>
-
-        <div class="extra-benefits-box">
-            <div class="extra-benefits-title">🎁 Övriga rabatter & förmåner (Hos oss)</div>
-            <div class="benefit-item">
-                <span class="benefit-name">1. Räntebesparing jämfört med konkurrenten (första månaden):</span>
-                <span id="benefit-interest-val" class="benefit-value">0 kr</span>
-            </div>
-            <div id="benefit-card-row" class="benefit-item inactive-benefit">
-                <span class="benefit-name">2. Guldkund: Kreditkort utan årsavgift (Värde 300 kr/år):</span>
-                <span id="benefit-card-val" class="benefit-value">Ingår ej</span>
-            </div>
-            <div id="benefit-deductible-row" class="benefit-item inactive-benefit">
-                <span class="benefit-name">3. Guldkund: Självriskreducering med 1 000 kr vid brand/vatten/inbrott:</span>
-                <span id="benefit-deductible-val" class="benefit-value">Ingår ej</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function addInsuranceRow(optionId, name = "Extra försäkring", cost = 1200) {
-        const container = document.querySelector(`#${optionId} .insurance-list`);
-        const row = document.createElement('div');
-        row.className = 'form-row triple';
-        row.innerHTML = `
-            <div>
-                <input type="text" class="ins-name" value="${name}" oninput="updateURL()">
-            </div>
-            <div>
-                <input type="number" class="ins-cost" value="${cost}" oninput="calculate()">
-            </div>
-            <button class="btn-del" onclick="this.parentElement.remove(); calculate();">×</button>
-        `;
-        container.appendChild(row);
-        calculate();
-    }
-
-    function calculateOption(id) {
-        const card = document.getElementById(id);
-        const isHosOss = (id === 'opt1');
-        
-        const loan = parseFloat(card.querySelector('.bank-loan').value) || 0;
-        const rate = parseFloat(card.querySelector('.bank-rate').value) || 0;
-        const bankMonthly = (loan * (rate / 100)) / 12;
-        card.querySelector('.res-bank').innerText = Math.round(bankMonthly).toLocaleString('sv-SE');
-
-        let alarmMonthly = 0;
-        if (isHosOss) {
-            alarmMonthly = 289;
-            card.querySelector('.res-alarm').innerText = "289";
-        } else {
-            alarmMonthly = parseFloat(card.querySelector('.alarm-cost').value) || 0;
-            card.querySelector('.res-alarm').innerText = Math.round(alarmMonthly).toLocaleString('sv-SE');
-        }
-        const alarmDiscountPercent = parseFloat(card.querySelector('.alarm-disc').value) || 0;
-
-        let isGold = false;
-        if (isHosOss) {
-            const hasAccount = document.getElementById('chk-account').checked;
-            const hasSavings = document.getElementById('chk-savings').checked;
-            if (hasAccount && hasSavings) {
-                isGold = true;
-                document.getElementById('gold-badge').style.display = 'inline-block';
-            } else {
-                document.getElementById('gold-badge').style.display = 'none';
-            }
-        }
-
-        let totalInsuranceMonthly = 0;
-        const insuranceRows = card.querySelectorAll('.insurance-list .form-row');
-        
-        insuranceRows.forEach((row, index) => {
-            const annualCost = parseFloat(row.querySelector('.ins-cost').value) || 0;
-            let monthlyCost = annualCost / 12;
-            
-            if (isHosOss && isGold) {
-                monthlyCost = monthlyCost * 0.80;
-            }
-            
-            if (index === 0 && alarmDiscountPercent > 0) {
-                monthlyCost = monthlyCost * (1 - (alarmDiscountPercent / 100));
-            }
-            
-            totalInsuranceMonthly += monthlyCost;
-        });
-        
-        card.querySelector('.res-ins').innerText = Math.round(totalInsuranceMonthly).toLocaleString('sv-SE');
-
-        return {
-            total: bankMonthly + alarmMonthly + totalInsuranceMonthly,
-            bankRaw: bankMonthly,
-            isGold: isGold
-        };
-    }
-
-    function calculate() {
-        const res1 = calculateOption('opt1');
-        const res2 = calculateOption('opt2');
-
-        const tot1 = res1.total;
-        const tot2 = res2.total;
-
-        document.getElementById('label-tot1').innerText = Math.round(tot1).toLocaleString('sv-SE') + " kr/mån";
-        document.getElementById('label-tot2').innerText = Math.round(tot2).toLocaleString('sv-SE') + " kr/mån";
-
-        const maxTot = Math.max(tot1, tot2, 1);
-        const bar1Percent = (tot1 / maxTot) * 100;
-        const bar2Percent = (tot2 / maxTot) * 100;
-
-        const bar1 = document.getElementById('bar1');
-        const bar2 = document.getElementById('bar2');
-        bar1.style.width = bar1Percent + "%";
-        bar2.style.width = bar2Percent + "%";
-
-        const interestSaving = Math.max(0, res2.bankRaw - res1.bankRaw);
-        document.getElementById('benefit-interest-val').innerText = `${Math.round(interestSaving).toLocaleString('sv-SE')} kr/mån`;
-
-        const cardRow = document.getElementById('benefit-card-row');
-        const deductibleRow = document.getElementById('benefit-deductible-row');
-        
-        if (res1.isGold) {
-            cardRow.className = "benefit-item";
-            document.getElementById('benefit-card-val').innerText = "Ingår (Sparar 300 kr/år)";
-            deductibleRow.className = "benefit-item";
-            document.getElementById('benefit-deductible-val').innerText = "Ingår (1 000 kr i skydd)";
-        } else {
-            cardRow.className = "benefit-item inactive-benefit";
-            document.getElementById('benefit-card-val').innerText = "Ingår ej";
-            deductibleRow.className = "benefit-item inactive-benefit";
-            document.getElementById('benefit-deductible-val').innerText = "Ingår ej";
-        }
-
-        const compBox = document.getElementById('comparison-result');
-        if (Math.round(tot1) === Math.round(tot2)) {
-            bar1.style.backgroundColor = "var(--lf-blue)";
-            bar2.style.backgroundColor = "var(--lf-blue)";
-            compBox.className = "result-box";
-            compBox.style.backgroundColor = "#f1f5f9";
-            compBox.style.color = "#1e293b";
-            compBox.innerText = "Alternativen kostar lika mycket per månad!";
-        } else {
-            const diff = Math.abs(tot1 - tot2);
-            const diffYear = diff * 12;
-            
-            if (tot1 < tot2) {
-                bar1.style.backgroundColor = "var(--success)";
-                bar2.style.backgroundColor = "var(--danger)";
-                compBox.className = "result-box winner";
-                compBox.style.backgroundColor = "#dcfce7";
-                compBox.style.color = "#14532d";
-                compBox.innerText = `🎉 "Hos oss" är billigare! Du sparar ${Math.round(diff).toLocaleString('sv-SE')} kr i månaden (${Math.round(diffYear).toLocaleString('sv-SE')} kr/år).`;
-            } else {
-                bar1.style.backgroundColor = "var(--danger)";
-                bar2.style.backgroundColor = "var(--success)";
-                compBox.className = "result-box winner";
-                compBox.style.backgroundColor = "#fee2e2";
-                compBox.style.color = "#991b1b";
-                compBox.innerText = `⚠️ Konkurrenten är billigare i den direkta månadskostnaden med ${Math.round(diff).toLocaleString('sv-SE')} kr/mån. Se över de övriga rabatterna nedan!`;
-            }
-        }
-
-        updateURL();
-    }
-
-    function getCardData(id) {
-        const card = document.getElementById(id);
-        const isHosOss = (id === 'opt1');
-        const data = {
-            loan: card.querySelector('.bank-loan').value,
-            rate: card.querySelector('.bank-rate').value,
-            alarmCost: isHosOss ? "289" : card.querySelector('.alarm-cost').value,
-            alarmDisc: card.querySelector('.alarm-disc').value,
-            insurances: []
-        };
-
-        card.querySelectorAll('.insurance-list .form-row').forEach(row => {
-            data.insurances.push({
-                name: row.querySelector('.ins-name').value,
-                cost: row.querySelector('.ins-cost').value
-            });
-        });
-        return data;
-    }
-
-    function updateURL() {
-        const state = {
-            opt1: getCardData('opt1'),
-            opt2: getCardData('opt2'),
-            chkAccount: document.getElementById('chk-account').checked,
-            chkSavings: document.getElementById('chk-savings').checked
-        };
-        const json = JSON.stringify(state);
-        const b64 = btoa(unescape(encodeURIComponent(json)));
-        window.history.replaceState(null, '', '#' + b64);
-    }
-
-    function loadURL() {
-        if (!window.location.hash) {
-            calculate();
-            return;
-        }
-        try {
-            const b64 = window.location.hash.substring(1);
-            const json = decodeURIComponent(escape(atob(b64)));
-            const state = JSON.parse(json);
-
-            const opt1 = document.getElementById('opt1');
-            opt1.querySelector('.bank-loan').value = state.opt1.loan;
-            opt1.querySelector('.bank-rate').value = state.opt1.rate;
-            opt1.querySelector('.alarm-disc').value = state.opt1.alarmDisc;
-            
-            document.getElementById('chk-account').checked = state.chkAccount;
-            document.getElementById('chk-savings').checked = state.chkSavings;
-
-            const list1 = opt1.querySelector('.insurance-list');
-            list1.innerHTML = '';
-            state.opt1.insurances.forEach((ins, index) => {
-                if(index === 0) {
-                    list1.innerHTML += `
-                        <div class="form-row">
-                            <div><label>Försäkringens namn</label><input type="text" class="ins-name" value="${ins.name}" readonly></div>
-                            <div><label>Kostnad (kr/år)</label><input type="number" class="ins-cost" value="${ins.cost}" oninput="calculate()"></div>
-                        </div>`;
-                } else {
-                    addInsuranceRow('opt1', ins.name, ins.cost);
-                }
-            });
-
-            const opt2 = document.getElementById('opt2');
-            opt2.querySelector('.bank-loan').value = state.opt2.loan;
-            opt2.querySelector('.bank-rate').value = state.opt2.rate;
-            opt2.querySelector('.alarm-cost').value = state.opt2.alarmCost;
-            opt2.querySelector('.alarm-disc').value = state.opt2.alarmDisc;
-
-            const list2 = opt2.querySelector('.insurance-list');
-            list2.innerHTML = '';
-            state.opt2.insurances.forEach((ins, index) => {
-                if(index === 0) {
-                    list2.innerHTML += `
-                        <div class="form-row">
-                            <div><label>Försäkringens namn</label><input type="text" class="ins-name" value="${ins.name}" readonly></div>
-                            <div><label>Kostnad (kr/år)</label><input type="number" class="ins-cost" value="${ins.cost}" oninput="calculate()"></div>
-                        </div>`;
-                } else {
-                    addInsuranceRow('opt2', ins.name, ins.cost);
-                }
-            });
-
-            calculate();
-        } catch (e) {
-            console.error("Fel vid laddning av sparad data", e);
-            calculate();
-        }
-    }
-
-    function copyShareLink() {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Länken har kopierats till urklipp! Nu kan du dela den.");
-    }
-
-    window.onload = loadURL;
-</script>
-
-</body>
-</html>
